@@ -1,0 +1,5 @@
+@include('landingpage.header')
+@include('sweetalert::alert')
+@include('landingpage.navigation')
+@yield('content')
+@include('landingpage.footer')
