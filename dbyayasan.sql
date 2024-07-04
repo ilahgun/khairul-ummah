@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 29, 2022 at 03:43 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Jul 04, 2024 at 01:22 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -37,15 +37,15 @@ CREATE TABLE `anak_asuh` (
   `foto` varchar(45) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `anak_asuh`
 --
 
 INSERT INTO `anak_asuh` (`id`, `nama`, `tmp_lahir`, `tgl_lahir`, `gender`, `pendidikan`, `foto`, `created_at`, `updated_at`) VALUES
-(1, 'Jamal Abidin', 'Bogor', '2008-12-16', 'Laki-Laki', 'SMP', 'foto-Jamal Abidin.jpg', NULL, '2022-11-20 08:48:57'),
-(6, 'Sintia Larasati', 'Bogor', '2005-12-16', 'Perempuan', 'SMA', 'foto-Sintia Larasati.jpg', '2022-12-22 01:16:19', '2022-12-22 01:17:08');
+(6, 'Sintia Larasati', 'Bogor', '2005-12-16', 'Perempuan', 'SMA', 'foto-Sintia Larasati.jpg', '2022-12-22 01:16:19', '2022-12-22 01:17:08'),
+(8, 'aprizal', 'Bogor', '2015-07-05', 'Laki-Laki', 'smp', 'foto-aprizal.jpg', '2024-06-18 01:58:55', '2024-06-18 02:03:22');
 
 -- --------------------------------------------------------
 
@@ -55,10 +55,10 @@ INSERT INTO `anak_asuh` (`id`, `nama`, `tmp_lahir`, `tgl_lahir`, `gender`, `pend
 
 CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `keywords` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `meta_desc` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `keywords` varchar(255) NOT NULL,
+  `meta_desc` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -87,14 +87,15 @@ CREATE TABLE `donasi` (
   `metode_pembayaran_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `donasi`
 --
 
 INSERT INTO `donasi` (`id`, `keterangan`, `tgl_donasi`, `jml_donasi`, `bukti_transfer`, `donatur_id`, `metode_pembayaran_id`, `created_at`, `updated_at`) VALUES
-(9, 'Membantu anak asuh yang ingin bersekolah', '2022-12-22', 100000, 'bukti_transfer-Ade Ramanda-2022-12-22 134739.jpg', 10, 2, '2022-12-22 06:47:39', NULL);
+(9, 'Membantu anak asuh yang ingin bersekolah', '2022-12-22', 100000, 'bukti_transfer-Ade Ramanda-2022-12-22 134739.jpg', 10, 2, '2022-12-22 06:47:39', NULL),
+(11, 'tolong di sampaikan ke anak yatim', '2024-06-18', 50, 'bukti_transfer-agus agus-2024-06-18 072514.jpg', 12, 2, '2024-06-18 00:25:14', NULL);
 
 -- --------------------------------------------------------
 
@@ -108,14 +109,15 @@ CREATE TABLE `donatur` (
   `no_hp` varchar(45) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `donatur`
 --
 
 INSERT INTO `donatur` (`id`, `nama`, `no_hp`, `created_at`, `updated_at`) VALUES
-(10, 'Ade Ramanda', '082867352883', '2022-12-22 06:47:39', '2022-12-22 06:47:39');
+(10, 'Ade Ramanda', '082867352883', '2022-12-22 06:47:39', '2022-12-22 06:47:39'),
+(12, 'agus agus', '081213365544tolo', '2024-06-18 00:25:14', '2024-06-18 00:25:14');
 
 -- --------------------------------------------------------
 
@@ -125,11 +127,11 @@ INSERT INTO `donatur` (`id`, `nama`, `no_hp`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `failed_jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -146,7 +148,7 @@ CREATE TABLE `metode_pembayaran` (
   `icon` varchar(45) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `metode_pembayaran`
@@ -164,7 +166,7 @@ INSERT INTO `metode_pembayaran` (`id`, `nama`, `nomor`, `icon`, `created_at`, `u
 
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -189,8 +191,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -202,11 +204,11 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `personal_access_tokens` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) NOT NULL,
   `tokenable_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -223,12 +225,12 @@ CREATE TABLE `posts` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `category_id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `cover` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `desc` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `keywords` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `meta_desc` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cover` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `desc` longtext NOT NULL,
+  `keywords` varchar(255) NOT NULL,
+  `meta_desc` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -246,7 +248,8 @@ INSERT INTO `posts` (`id`, `category_id`, `user_id`, `cover`, `title`, `slug`, `
 (8, 1, 3, 'landingpage/images/news/LV7b1ZoOsmXN9Kml2EjYHUnyWPKaUvqYMZ0OKcw1.png', 'latihan coba', 'latihan-coba', 'latihan', 'latihan', 'latihan', '2022-12-18 03:15:54', '2022-12-18 04:13:19', '2022-12-18 04:13:19'),
 (9, 1, 3, 'images/blog/ngLidBLqbPOwS0MyLSMQpgBHfDd7GNAUSBgtqjOV.jpg', 'Latihannnn', 'latihannnn', 'Latihannnn', 'Latihannnn', 'Latihannnn', '2022-12-18 04:59:10', '2022-12-19 08:25:05', '2022-12-19 08:25:05'),
 (10, 1, 3, 'images/blog/3QIxRT1RLcmRPSzStLA8kaFfpB7e057HO78p9MnF.png', 'tes', 'tes', 'tes', 'tes', 'tes', '2022-12-19 06:54:16', '2022-12-19 07:34:02', '2022-12-19 07:34:02'),
-(11, 1, 3, 'images/blog/q0oppCprxmXBAsMnSpntaOcWHrCJwZ6j2Voib2d0.jpg', 'nyoba', 'nyoba', 'Awal narasi biasanya berisi pengantar yaitu memperkenalkan suasana dan tokoh. Bagian awal harus dibuat menarik agar dapat mengikat pembaca. Bagian tengah merupakan bagian yang memunculkan suatu konflik. Konflik lalu diarahkan menuju klimaks cerita. Setelah konfik timbul dan mencapai klimaks, secara berangsur-angsur cerita akan mereda. Akhir cerita yang mereda ini memiliki cara pengungkapan bermacam-macam. Ada yang menceritakannya dengan panjang, ada yang singkat, ada pula yang berusaha menggantungkan akhir cerita dengan mempersilakan pembaca untuk menebaknya sendiri.', 'coba', 'nyoba', '2022-12-21 07:42:22', '2022-12-21 07:42:22', NULL);
+(11, 1, 3, 'images/blog/q0oppCprxmXBAsMnSpntaOcWHrCJwZ6j2Voib2d0.jpg', 'nyoba', 'nyoba', 'Awal narasi biasanya berisi pengantar yaitu memperkenalkan suasana dan tokoh. Bagian awal harus dibuat menarik agar dapat mengikat pembaca. Bagian tengah merupakan bagian yang memunculkan suatu konflik. Konflik lalu diarahkan menuju klimaks cerita. Setelah konfik timbul dan mencapai klimaks, secara berangsur-angsur cerita akan mereda. Akhir cerita yang mereda ini memiliki cara pengungkapan bermacam-macam. Ada yang menceritakannya dengan panjang, ada yang singkat, ada pula yang berusaha menggantungkan akhir cerita dengan mempersilakan pembaca untuk menebaknya sendiri.', 'coba', 'nyoba', '2022-12-21 07:42:22', '2022-12-21 07:42:22', NULL),
+(17, 1, 3, 'images/blog/1ZTpAMXiJCtQY2dXzpHDaX5vLscjNU3KGDtrhylt.png', 'mugiwara', 'mugiwara', 'mugiwara', 'sholat', 'ustad', '2024-06-19 00:32:13', '2024-06-19 00:32:13', NULL);
 
 -- --------------------------------------------------------
 
@@ -274,7 +277,8 @@ INSERT INTO `post_tag` (`id`, `post_id`, `tag_id`, `created_at`, `updated_at`) V
 (8, 8, 2, NULL, NULL),
 (9, 9, 2, NULL, NULL),
 (10, 10, 3, NULL, NULL),
-(11, 11, 1, NULL, NULL);
+(11, 11, 1, NULL, NULL),
+(17, 17, 3, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -284,10 +288,10 @@ INSERT INTO `post_tag` (`id`, `post_id`, `tag_id`, `created_at`, `updated_at`) V
 
 CREATE TABLE `tags` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `keywords` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `meta_desc` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `keywords` varchar(255) NOT NULL,
+  `meta_desc` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -309,16 +313,16 @@ INSERT INTO `tags` (`id`, `name`, `slug`, `keywords`, `meta_desc`, `created_at`,
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `nama` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `no_hp` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama` varchar(255) NOT NULL,
+  `no_hp` varchar(15) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('ketua','sekretaris','bendahara','staff') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` enum('admin','pengurus') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pengurus',
+  `password` varchar(255) NOT NULL,
+  `status` enum('ketua','sekretaris','bendahara','staff') NOT NULL,
+  `role` enum('admin','pengurus') NOT NULL DEFAULT 'pengurus',
   `isactive` tinyint(1) NOT NULL DEFAULT 0,
-  `foto` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `foto` varchar(45) DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -329,7 +333,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `nama`, `no_hp`, `email`, `email_verified_at`, `password`, `status`, `role`, `isactive`, `foto`, `remember_token`, `created_at`, `updated_at`) VALUES
 (3, 'Admin', '088766276356', 'admin@gmail.com', NULL, '$2y$10$U8sV7lYrcBongJh86Lzs5.sZUMqZ97ClgCdce.bAqAKCP//wZQNjW', 'staff', 'admin', 1, NULL, NULL, '2022-11-29 09:16:26', '2022-11-29 10:32:04'),
-(17, 'Madun Hawari', '08213672162', 'madun@gmail.com', NULL, '$2y$10$hQIbjV2ZeXnM0SEMIZeDmOzWZZKTQpuM/BMUW46nEjN6SJGLRR9eC', 'sekretaris', 'pengurus', 1, 'pict-Madun Hawari.jpg', NULL, '2022-12-21 09:09:19', '2022-12-22 08:45:44');
+(18, 'Hisoka', '0838172663728', 'hisoka@gmail.com', NULL, '$2y$10$8KgzJT0OLaifl1XQzBmPp.T8/9UJaxaURYP.Ds.5QuNRCoxwfDWse', 'staff', 'pengurus', 1, NULL, NULL, '2024-06-17 20:56:03', '2024-06-17 20:56:56'),
+(19, 'Agus Erwan Abidin', '081213365544', 'Agus@gmail.com', NULL, '$2y$10$PF7Y.s73Rm6jCJpPSJp51uQlL7r9q3PVxdEq77MDLMvsC1wysVhba', 'staff', 'pengurus', 1, NULL, NULL, '2024-06-18 00:31:28', '2024-06-18 00:32:41'),
+(20, 'yudi purnama', '089680994104', 'muhammadsyammil@mail.com', NULL, '$2y$10$goSO1gh.sIfsLW/gxFXKP.jKdmEtXZT3Ugf8PLvil8WvRZ.vlb.4e', 'ketua', 'pengurus', 1, NULL, NULL, '2024-06-18 01:28:20', '2024-06-18 01:29:37');
 
 --
 -- Indexes for dumped tables
@@ -435,7 +441,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `anak_asuh`
 --
 ALTER TABLE `anak_asuh`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -447,13 +453,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `donasi`
 --
 ALTER TABLE `donasi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `donatur`
 --
 ALTER TABLE `donatur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -483,13 +489,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `post_tag`
 --
 ALTER TABLE `post_tag`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tags`
@@ -501,7 +507,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables
