@@ -29,7 +29,7 @@
         <div class="container my-5">
             <div class="row">
                 <div class="card">
-                    <img src="{{ url('/storage/'.$post->cover) }}" alt="" class="img-fluid">
+                    <img src="{{ url($post->cover) }}" alt="" class="img-fluid">
                     <div class="card-body">
                         <h1 class="card-title">{{ $post->title }}</h1>
                         <div class="d-flex my-2">

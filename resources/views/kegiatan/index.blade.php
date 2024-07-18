@@ -38,7 +38,7 @@
                     <div class="col-md-6 wow slideInUp" data-wow-delay="0.1s">
                     <div class="blog-item bg-light rounded overflow-hidden">
                     <div class="blog-img position-relative overflow-hidden">
-                        <img src="{{ url('storage/'.$row->cover)}}" class="card-img-top" style="height: 50%;" alt="...">
+                        <img src="{{ url($row->cover)}}" class="card-img-top" style="height: 50%;" alt="...">
                         <div class="card-body">
                             <a href="{{ route('show', $row->slug) }}" class="text-dark">
                             <h4 class="mb-3">{{ $row->title }}</h4>

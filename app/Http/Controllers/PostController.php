@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PostController extends Controller
@@ -42,43 +43,108 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // public function store(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         "title"     => "required|unique:posts,title",
+    //         "cover"     => "required",
+    //         "desc"      => "required",
+    //         "category"  => "required",
+    //         "tags"      => "array|required",
+    //         "keywords"  => "required",
+    //         "meta_desc" => "required",
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return redirect()->back()
+    //             ->withErrors($validator)
+    //             ->withInput();
+    //     }
+    //     $post               = new Post();
+
+    //     $cover              = $request->file('cover');
+    //     if ($cover) {
+    //         $cover_path     = $cover->store('images/blog', 'public');
+    //         $post->cover    = $cover_path;
+    //     }
+    //     $post->title        = $request->title;
+    //     $post->slug         = Str::slug($request->title);
+    //     $post->user_id      = Auth::user()->id;
+    //     $post->category_id  = $request->category;
+    //     $post->desc         = $request->desc;
+    //     $post->keywords     = $request->keywords;
+    //     $post->meta_desc    = $request->meta_desc;
+    //     $post->save();
+
+    //     $post->tags()->attach($request->tags);
+
+    //     return redirect()->route('posts.index')->with('success', 'Data added successfully');
+    // }
     public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            "title"     => "required|unique:posts,title",
-            "cover"     => "required",
-            "desc"      => "required",
-            "category"  => "required",
-            "tags"      => "array|required",
-            "keywords"  => "required",
-            "meta_desc" => "required",
+{
+    // Validate the request
+    $validator = Validator::make($request->all(), [
+        "title"     => "required|unique:posts,title",
+        "cover"     => "required|image",
+        "desc"      => "required",
+        "category"  => "required|exists:categories,id",
+        "tags"      => "array|required",
+        "keywords"  => "required",
+        "meta_desc" => "required",
+    ]);
+
+    // Redirect back with errors if validation fails
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
+
+    // Create a new post instance
+    $post = new Post();
+    $post->title = $request->title;
+    $post->slug = Str::slug($request->title);
+    $post->user_id = Auth::user()->id;
+    $post->category_id = $request->category;
+    $post->desc = $request->desc;
+    $post->keywords = $request->keywords;
+    $post->meta_desc = $request->meta_desc;
+
+    // Handle file upload to telegrap.ph
+    if ($request->hasFile('cover')) {
+        $cover = $request->file('cover');
+        $coverPath = $cover->getPathname();
+        
+        // Upload to telegrap.ph
+        $client = new Client();
+        $response = $client->post('https://telegra.ph/upload', [
+            'multipart' => [
+                [
+                    'name'     => 'file',
+                    'contents' => fopen($coverPath, 'r'),
+                    'filename' => $cover->getClientOriginalName()
+                ],
+            ]
         ]);
 
-        if ($validator->fails()) {
+        $body = json_decode($response->getBody()->getContents(), true);
+        if (isset($body[0]['src'])) {
+            $post->cover = 'https://telegra.ph' . $body[0]['src'];
+        } else {
             return redirect()->back()
-                ->withErrors($validator)
+                ->withErrors(['cover' => 'Failed to upload cover image.'])
                 ->withInput();
         }
-        $post               = new Post();
-
-        $cover              = $request->file('cover');
-        if ($cover) {
-            $cover_path     = $cover->store('images/blog', 'public');
-            $post->cover    = $cover_path;
-        }
-        $post->title        = $request->title;
-        $post->slug         = Str::slug($request->title);
-        $post->user_id      = Auth::user()->id;
-        $post->category_id  = $request->category;
-        $post->desc         = $request->desc;
-        $post->keywords     = $request->keywords;
-        $post->meta_desc    = $request->meta_desc;
-        $post->save();
-
-        $post->tags()->attach($request->tags);
-
-        return redirect()->route('posts.index')->with('success', 'Data added successfully');
     }
+
+    // Save the post
+    $post->save();
+
+    // Attach tags
+    $post->tags()->attach($request->tags);
+
+    return redirect()->route('posts.index')->with('success', 'Data added successfully');
+}
 
     /**
      * Display the specified resource.
@@ -112,51 +178,118 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // public function update(Request $request, $id)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         "title"     => "required|unique:posts,title," . $id,
+    //         "desc"      => "required",
+    //         "category"  => "required",
+    //         "tags"      => "array|required",
+    //         "keywords"  => "required",
+    //         "meta_desc" => "required",
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return redirect()->back()
+    //             ->withErrors($validator)
+    //             ->withInput();
+    //     }
+
+    //     $post = Post::findOrFail($id);
+
+    //     $new_cover = $request->file('cover');
+
+    //     if ($new_cover) {
+    //         if ($post->cover && file_exists(storage_path('app/public/' . $post->cover))) {
+    //             Storage::delete('public/' . $post->cover);
+    //         }
+
+    //         $new_cover_path = $new_cover->store('images/blog', 'public');
+
+    //         $post->cover = $new_cover_path;
+    //     }
+
+    //     $post->title        = $request->title;
+    //     $post->slug         = $request->slug;
+    //     $post->user_id      = Auth::user()->id;
+    //     $post->category_id  = $request->category;
+    //     $post->desc         = $request->desc;
+    //     $post->keywords     = $request->keywords;
+    //     $post->meta_desc    = $request->meta_desc;
+    //     $post->save();
+
+    //     $post->tags()->sync($request->tags);
+
+    //     return redirect()->route('posts.index')->with('success', 'Data updated successfully');
+    // }
     public function update(Request $request, $id)
     {
+        // Validate the request
         $validator = Validator::make($request->all(), [
             "title"     => "required|unique:posts,title," . $id,
             "desc"      => "required",
-            "category"  => "required",
+            "category"  => "required|exists:categories,id",
             "tags"      => "array|required",
             "keywords"  => "required",
             "meta_desc" => "required",
         ]);
-
+    
+        // Redirect back with errors if validation fails
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
-
+    
+        // Find the post or fail
         $post = Post::findOrFail($id);
-
+    
+        // Handle file upload to telegrap.ph
         $new_cover = $request->file('cover');
-
         if ($new_cover) {
-            if ($post->cover && file_exists(storage_path('app/public/' . $post->cover))) {
+            // Delete the old cover image if it exists
+            if ($post->cover && Storage::exists('public/' . $post->cover)) {
                 Storage::delete('public/' . $post->cover);
             }
-
-            $new_cover_path = $new_cover->store('images/blog', 'public');
-
-            $post->cover = $new_cover_path;
+    
+            // Upload new cover to telegrap.ph
+            $coverPath = $new_cover->getPathname();
+            $client = new Client();
+            $response = $client->post('https://telegra.ph/upload', [
+                'multipart' => [
+                    [
+                        'name'     => 'file',
+                        'contents' => fopen($coverPath, 'r'),
+                        'filename' => $new_cover->getClientOriginalName()
+                    ],
+                ]
+            ]);
+    
+            $body = json_decode($response->getBody()->getContents(), true);
+            if (isset($body[0]['src'])) {
+                $post->cover = 'https://telegra.ph' . $body[0]['src'];
+            } else {
+                return redirect()->back()
+                    ->withErrors(['cover' => 'Failed to upload cover image.'])
+                    ->withInput();
+            }
         }
-
+    
+        // Update other post attributes
         $post->title        = $request->title;
-        $post->slug         = $request->slug;
+        $post->slug         = Str::slug($request->title);
         $post->user_id      = Auth::user()->id;
         $post->category_id  = $request->category;
         $post->desc         = $request->desc;
         $post->keywords     = $request->keywords;
         $post->meta_desc    = $request->meta_desc;
         $post->save();
-
+    
+        // Sync tags
         $post->tags()->sync($request->tags);
-
+    
         return redirect()->route('posts.index')->with('success', 'Data updated successfully');
     }
-
     /**
      * Remove the specified resource from storage.
      *
