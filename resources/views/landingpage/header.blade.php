@@ -43,13 +43,13 @@ https://templatemo.com/tm-581-kind-heart-charity
                     <p class="d-flex mb-0">
                         <i class="bi-envelope me-2"></i>
 
-                        <a href="mailto:info@company.com">
+                        <a href="khairulummah@gmail.com">
                            khairulummah@gmail.com
                         </a>
                     </p>
                 </div>
 
-                <div class="col-lg-3 col-12 ms-auto d-lg-block d-none">
+                <div class="col-lg-3 col-12 ms-auto d-lg-block">
                     <ul class="social-icon">
                     @guest
                         @if (Route::has('login'))

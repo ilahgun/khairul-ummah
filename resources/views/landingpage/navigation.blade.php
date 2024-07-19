@@ -3,7 +3,7 @@
             <a class="navbar-brand" href="{{ url('/home')}}">
                 <img src="{{ url ('landingpage/images/logo_ryd.png') }}" class="logo img-fluid" alt="Kind Heart Charity">
                 <span>
-                    Rumah Yatim Khairul Ummah
+                    RYD Khairul Ummah
                     <small>Non-profit Organization</small>
                 </span>
             </a>
@@ -13,7 +13,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse " id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
                     <a class="nav-linkk {{ Request::is('/') || Request::is('home') ? 'active' : ''}}" href="{{ url('/home')}}">Home</a>
